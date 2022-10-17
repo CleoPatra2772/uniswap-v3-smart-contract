@@ -18,12 +18,12 @@ contract SingleSwap {
 
     // It should be noted that for the sake of these examples, we purposefully pass in the swap router instead of inherit the swap router for simplicity.
     // More advanced example contracts will detail how to inherit the swap router safely.
-
-    ISwapRouter public immutable swapRouter = ISwapRouter();
+    address public constant routerAddress = 0xE592427A0AEce92De3Edee1F18E0157C05861564;
+    ISwapRouter public immutable swapRouter = ISwapRouter(routerAddress);
 
     // This example swaps DAI/WETH9 for single path swaps and DAI/USDC/WETH9 for multi path swaps.
 
-    address public constant routerAddress = 0xE592427A0AEce92De3Edee1F18E0157C05861564;
+    
     address public constant LINK = 0x326C977E6efc84E512bB9C30f76E30c160eD06FB;
     address public constant WETH = 0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6;
 
@@ -76,7 +76,7 @@ contract SingleSwap {
     /// @return amountIn The amount of DAI actually spent in the swap.
     function swapExactOutputSingle(uint256 amountOut, uint256 amountInMaximum) external returns (uint256 amountIn) {
         // Transfer the specified amount of DAI to this contract.
-        linkToken.approve( msg.sender, address(this), amountInMaximum);
+        linkToken.approve(address(swapRouter), amountInMaximum);
 
         // Approve the router to spend the specifed `amountInMaximum` of DAI.
         // In production, you should choose the maximum amount to spend based on oracles or other data sources to acheive a better swap.
